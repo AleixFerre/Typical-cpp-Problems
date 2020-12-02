@@ -14,7 +14,7 @@
 using namespace std;
 
 // O(2^n) on n=i inicial
-int fibbonnaci(int i) {
+unsigned long long int fibbonnaci(unsigned long long int i) {
     if (i <= 1)
         return i;
     return fibbonnaci(i-1) + fibbonnaci(i-2);
@@ -38,25 +38,16 @@ int fibbonnaci_recursiveLinear(int i, vector<int>& sequencia) {
     return a + b;
 }
 
-int addOvf(unsigned long long int* result, unsigned long long int a, unsigned long long int b) {
-    if( a > ULLONG_MAX - b) {
-        return -1;
-    } else {
-        *result = a + b;
-        return 0;
-    }
-}
-
 // O(n) on n=i inicial
 unsigned long long int fibbonnaci_linear(int k) {
     unsigned long long int ant_ant = 0;
     unsigned long long int ant = 1;
     for (int i = 2; i <= k; i++) {
         unsigned long long int aux = ant;
-        int res = addOvf(&ant, ant, ant_ant);
-        if (res == -1) {
-            return 0;
-        }
+		if( ant > ULLONG_MAX - ant_ant) {
+			return 0;
+		}
+		ant = ant + ant_ant;
         ant_ant = aux;
     }
     return ant;
