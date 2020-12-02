@@ -1,3 +1,11 @@
+/*
+    Aleix Ferré | https://github.com/CatalaHD
+    -----------------------------------------
+    Programa que calcula el n numero de Fibonacci fent servir un mètode tradicional recursiu
+	un altre de recursiu optimitzat (memoitzant els resultats) i finalment arribem a una
+	solució simple guardant només els dos numeros anteriors que volem calcular.
+*/
+
 #include <iostream>
 #include <vector>
 #include <iomanip>
