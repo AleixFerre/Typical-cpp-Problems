@@ -1,0 +1,9 @@
+#!/bin/bash
+
+for fitxer in $( ls proves/t*.txt ); do
+	echo -e "\n============================="
+	echo -e "Execució fitxer $fitxer"
+	echo -e "=============================\n"
+	./bin/Debug/Sudoku.exe $fitxer
+done
+
