@@ -9,7 +9,7 @@ using namespace std;
 class Solucio {
   public:
     Solucio();
-    // Solucio(string nomFitxer);
+    Solucio(string nomFitxer);
 
     Candidats InicialitzarCandidats(unsigned pos) const;
     bool Acceptable(unsigned pos, const Candidats& can) const;
@@ -22,6 +22,7 @@ class Solucio {
 
   private:
     vector<vector<unsigned>> tauler;
+    vector<vector<bool>> esPodenTocar;
     unsigned casellesRestants, mida;
 
     void mostrarCasella(unsigned num) const;
@@ -30,6 +31,10 @@ class Solucio {
 
     unsigned getValorPosicio(unsigned index) const;
     void setValorPosicio(unsigned index, unsigned val);
+    bool pucPosarNum(unsigned index) const;
+
+    bool existeixFilaColumna(unsigned pos, unsigned val) const;
+    bool existeixQuadrat(unsigned pos, unsigned val) const;
 };
 
 #endif // SOLUCIO_H

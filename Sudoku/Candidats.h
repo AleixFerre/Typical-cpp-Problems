@@ -5,10 +5,13 @@ using namespace std;
 
 class Candidats {
   public:
+    Candidats();
     Candidats(unsigned _mida);
     Candidats(unsigned _mida, unsigned _index);
+
     unsigned Actual() const;
     bool Fi() const;
+
     void Seguent();
 
   private:

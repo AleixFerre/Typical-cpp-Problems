@@ -1,22 +1,22 @@
 # depslib dependency file v1.0
-1607386416 source:d:\tot\typical-cpp-problems\sudoku\main.cpp
-	<iostream>
+1607401959 source:d:\tot\typical-cpp-problems\sudoku\main.cpp
 	"Solucionador.h"
 
-1607391889 source:d:\tot\typical-cpp-problems\sudoku\candidats.cpp
+1607394236 source:d:\tot\typical-cpp-problems\sudoku\candidats.cpp
 	"Candidats.h"
 
-1607391004 d:\tot\typical-cpp-problems\sudoku\candidats.h
+1607398160 d:\tot\typical-cpp-problems\sudoku\candidats.h
 
-1607391956 source:d:\tot\typical-cpp-problems\sudoku\solucio.cpp
+1607401777 source:d:\tot\typical-cpp-problems\sudoku\solucio.cpp
 	"Solucio.h"
+	<fstream>
 
-1607391608 d:\tot\typical-cpp-problems\sudoku\solucio.h
+1607401163 d:\tot\typical-cpp-problems\sudoku\solucio.h
 	"Candidats.h"
 	<iostream>
 	<vector>
 
-1607391190 source:d:\tot\typical-cpp-problems\sudoku\solucionador.cpp
+1607398879 source:d:\tot\typical-cpp-problems\sudoku\solucionador.cpp
 	"Solucionador.h"
 
 1607390538 d:\tot\typical-cpp-problems\sudoku\solucionador.h

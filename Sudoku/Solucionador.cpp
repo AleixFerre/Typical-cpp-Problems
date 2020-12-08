@@ -6,7 +6,7 @@ Solucionador::Solucionador() {
 
 bool Solucionador::solucionar(Solucio& sol) {
     actual = sol;
-    cout << endl << "Buscant una solució..." << endl;
+    cout << endl << "✔ | Buscant una solució..." << endl;
     backtracking(0);
     sol = actual;
     return Encertat;

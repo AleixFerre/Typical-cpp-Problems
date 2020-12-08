@@ -1,28 +1,39 @@
 #include "Solucio.h"
+#include <fstream>
 
 Solucio::Solucio() {
-    tauler = {
-        {3, 0, 6, 5, 0, 8, 4, 0, 0},
-        {5, 2, 0, 0, 0, 0, 0, 0, 0},
-        {0, 8, 7, 0, 0, 0, 0, 3, 1},
-        {0, 0, 3, 0, 1, 0, 0, 8, 0},
-        {9, 0, 0, 8, 6, 3, 0, 0, 5},
-        {0, 5, 0, 0, 9, 0, 6, 0, 0},
-        {1, 3, 0, 0, 0, 0, 2, 5, 0},
-        {0, 0, 0, 0, 0, 0, 0, 7, 4},
-        {0, 0, 5, 2, 0, 6, 3, 0, 0}
-    };
+    mida = 9;
+    tauler = vector<vector<unsigned>>(mida, vector<unsigned>(mida, 0));
+    esPodenTocar = vector<vector<bool>>(mida, vector<bool>(mida, false));
+    casellesRestants = mida * mida;
+}
 
-    casellesRestants = 0;
-    mida = tauler.size();
+Solucio::Solucio(string nomFitxer) {
 
-    for (unsigned i=0; i < mida; i++) {
-        for (unsigned j=0; j < mida; j++) {
-            if (tauler[i][j] == 0) {
-                casellesRestants++;
-            }
+    ifstream fitxer;
+    fitxer.open(nomFitxer);
+
+    if (fitxer.fail()) {
+        cout << "No es pot llegir el fitxer " << nomFitxer << endl;
+        exit(1);
+    }
+
+    // Pre: sudoku mida 9x9 i fitxer formatat correctament
+    mida = 9;
+    for (unsigned i = 0; i < mida; i++) {
+        tauler.push_back(vector<unsigned>());
+        esPodenTocar.push_back(vector<bool>());
+        for (unsigned j = 0; j < mida; j++) {
+            unsigned val;
+            fitxer >> val;
+            tauler[i].push_back(val);
+            esPodenTocar[i].push_back(val == 0);
         }
     }
+
+    fitxer.close();
+    casellesRestants = mida*mida;
+
 }
 
 Candidats Solucio::InicialitzarCandidats(unsigned pos) const {
@@ -31,21 +42,22 @@ Candidats Solucio::InicialitzarCandidats(unsigned pos) const {
     if (valor == 0) {
         return Candidats(mida);
     } else {
-        // si el valor està posat, no hem de comprovar res, només hem de passar un bucle per passar al seguent
-        return Candidats(1, 0);
+        // Si el valor està posat, no hem de comprovar res,
+        // només hem de passar un bucle per passar a la següent casella
+        return Candidats();
     }
 }
 
 bool Solucio::Acceptable(unsigned pos, const Candidats& can) const {
 
-    if (getValorPosicio(pos) != 0) {
+    if (not pucPosarNum(pos)) {
         return true;
     }
 
     // Si no està posat, mirem si el podem posar.
-
-    return true; // TODO
-
+    // Mirem fila, mirem columna i mirem quadrat
+    return not existeixFilaColumna(pos, can.Actual()) and
+           not existeixQuadrat(pos, can.Actual());
 }
 
 bool Solucio::SolucioCompleta() const {
@@ -53,17 +65,17 @@ bool Solucio::SolucioCompleta() const {
 }
 
 void Solucio::AnotarCandidat(unsigned pos, const Candidats& can) {
-    if (getValorPosicio(pos) == 0) {
+    if (pucPosarNum(pos)) {
         setValorPosicio(pos, can.Actual());
-        casellesRestants--;
     }
+    casellesRestants--;
 }
 
 void Solucio::DesanotarCandidat(unsigned pos) {
-    if (getValorPosicio(pos) == 0) {
+    if (pucPosarNum(pos)) {
         setValorPosicio(pos, 0);
-        casellesRestants++;
     }
+    casellesRestants++;
 }
 
 void Solucio::mostra() const {
@@ -74,14 +86,6 @@ void Solucio::mostra() const {
         mostrarLinia(tauler[i]);
     }
     mostrarLiniaDelimitant();
-}
-
-unsigned Solucio::getValorPosicio(unsigned index) const {
-    return tauler[index % mida][index / mida];
-}
-
-void Solucio::setValorPosicio(unsigned index, unsigned val) {
-    tauler[index % mida][index / mida] = val;
 }
 
 void Solucio::mostrarCasella(unsigned num) const {
@@ -97,17 +101,53 @@ void Solucio::mostrarLiniaDelimitant() const {
 }
 
 void Solucio::mostrarLinia(const vector<unsigned>& t) const {
-    cout << "| ";
-    for (int i = 0; i < 3; i++) {
-        mostrarCasella(t[i]);
-    }
-    cout << "| ";
-    for (int i = 3; i < 6; i++) {
-        mostrarCasella(t[i]);
-    }
-    cout << "| ";
-    for (int i = 6; i < 9; i++) {
-        mostrarCasella(t[i]);
+    for (int k = 0; k < 3; k++) {
+        cout << "| ";
+        int inc = k*3;
+        for (int i = inc; i < inc+3; i++) {
+            mostrarCasella(t[i]);
+        }
     }
     cout << "|" << endl;
 }
+
+unsigned Solucio::getValorPosicio(unsigned index) const {
+    return tauler[index % mida][index / mida];
+}
+
+void Solucio::setValorPosicio(unsigned index, unsigned val) {
+    tauler[index % mida][index / mida] = val;
+}
+
+bool Solucio::pucPosarNum(unsigned index) const {
+    return esPodenTocar[index % mida][index / mida];
+}
+
+bool Solucio::existeixFilaColumna(unsigned pos, unsigned val) const {
+
+    unsigned fila = pos % mida, columna = pos / mida;
+
+    for (unsigned i = 0; i < mida; i++) {
+        if (tauler[fila][i] == val or tauler[i][columna] == val) {
+            return true;
+        }
+    }
+
+    return false;
+}
+
+bool Solucio::existeixQuadrat(unsigned pos, unsigned val) const {
+    unsigned fila = pos % mida, columna = pos / mida,
+             principiFila = fila - fila % 3, principiColumna = columna - columna % 3;
+
+    for (int i = 0; i < 3; i++) {
+        for (int j = 0; j < 3; j++) {
+            if (tauler[i + principiFila][j + principiColumna] == val) {
+                return true;
+            }
+        }
+    }
+
+    return false;
+}
+

@@ -1,5 +1,10 @@
 #include "Candidats.h"
 
+Candidats::Candidats() {
+    mida = 0;
+    index = 0;
+}
+
 Candidats::Candidats(unsigned _mida) {
     mida = _mida;
     index = 1;
@@ -15,7 +20,7 @@ unsigned Candidats::Actual() const {
 }
 
 bool Candidats::Fi() const {
-    return index >= mida;
+    return index > mida;
 }
 
 void Candidats::Seguent() {
