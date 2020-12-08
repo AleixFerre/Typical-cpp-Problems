@@ -83,14 +83,16 @@ void Solucio::mostra() const {
         if (i%3 == 0) {
             mostrarLiniaDelimitant();
         }
-        mostrarLinia(tauler[i]);
+        mostrarLinia(tauler[i], esPodenTocar[i]);
     }
     mostrarLiniaDelimitant();
 }
 
-void Solucio::mostrarCasella(unsigned num) const {
+void Solucio::mostrarCasella(unsigned num, bool esInicial) const {
     if (num == 0) {
         cout << "· ";
+    } else if (esInicial) {
+        cout << "\033[93m" << num << "\033[39m ";
     } else {
         cout << num << " ";
     }
@@ -100,12 +102,12 @@ void Solucio::mostrarLiniaDelimitant() const {
     cout << "x-------x-------x-------x" << endl;
 }
 
-void Solucio::mostrarLinia(const vector<unsigned>& t) const {
+void Solucio::mostrarLinia(const vector<unsigned>& t, const vector<bool>& v) const {
     for (int k = 0; k < 3; k++) {
         cout << "| ";
         int inc = k*3;
         for (int i = inc; i < inc+3; i++) {
-            mostrarCasella(t[i]);
+            mostrarCasella(t[i], not v[i]);
         }
     }
     cout << "|" << endl;

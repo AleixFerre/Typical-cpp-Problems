@@ -25,8 +25,8 @@ class Solucio {
     vector<vector<bool>> esPodenTocar;
     unsigned casellesRestants, mida;
 
-    void mostrarCasella(unsigned num) const;
-    void mostrarLinia(const vector<unsigned>& t) const;
+    void mostrarCasella(unsigned num, bool esInicial) const;
+    void mostrarLinia(const vector<unsigned>& t, const vector<bool>& v) const;
     void mostrarLiniaDelimitant() const;
 
     unsigned getValorPosicio(unsigned index) const;
